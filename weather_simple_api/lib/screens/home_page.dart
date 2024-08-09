@@ -35,23 +35,29 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // Dark background color for Scaffold
       appBar: AppBar(
-        title: Text('Instagram'),
+        title: Text('Instagram',
+            style: TextStyle(color: Colors.white)), // White text color
+        backgroundColor: Colors.black, // Dark background color for AppBar
         actions: [
           IconButton(
-            icon: Icon(Icons.add_box_outlined),
+            icon: Icon(Icons.add_box_outlined,
+                color: Colors.white), // White icon color
             onPressed: () {
               // Action for add post
             },
           ),
           IconButton(
-            icon: Icon(Icons.favorite_border),
+            icon: Icon(Icons.favorite_border,
+                color: Colors.white), // White icon color
             onPressed: () {
               // Action for notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.message_outlined),
+            icon: Icon(Icons.message_outlined,
+                color: Colors.white), // White icon color
             onPressed: () {
               // Action for messages
             },
@@ -85,7 +91,8 @@ class HomePage extends StatelessWidget {
                         },
                         child: CircleAvatar(
                           radius: 35,
-                          backgroundColor: Colors.grey[300],
+                          backgroundColor: Colors
+                              .grey[700], // Darker background for CircleAvatar
                           backgroundImage: AssetImage(profileImages[
                               index]), // Use different profile image for each user
                         ),
@@ -94,7 +101,9 @@ class HomePage extends StatelessWidget {
                       Flexible(
                         child: Text(
                           'User $index',
-                          style: TextStyle(fontSize: 12),
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white), // White text color
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -109,71 +118,9 @@ class HomePage extends StatelessWidget {
             child: ListView.builder(
               itemCount: postImages.length,
               itemBuilder: (context, index) {
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: AssetImage(profileImages[index %
-                              profileImages
-                                  .length]), // Use different profile image for each user
-                        ),
-                        title: Text('User $index'),
-                        trailing: IconButton(
-                          icon: Icon(Icons.more_vert),
-                          onPressed: () {
-                            // Action for more options
-                          },
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // Example action for tapping on the post image
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 300,
-                          child: Image.asset(
-                            postImages[
-                                index], // Use different image for each post
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      ButtonBar(
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(Icons.favorite_border),
-                            onPressed: () {
-                              // Action for liking the post
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.comment_outlined),
-                            onPressed: () {
-                              // Action for commenting on the post
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.send_outlined),
-                            onPressed: () {
-                              // Action for sharing the post
-                            },
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'User $index: This is a sample caption for the post.',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
+                return PostCard(
+                  postImage: postImages[index],
+                  profileImage: profileImages[index % profileImages.length],
                 );
               },
             ),
@@ -181,6 +128,134 @@ class HomePage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomAppBarWidget(), // Add BottomAppBar here
+    );
+  }
+}
+
+class PostCard extends StatefulWidget {
+  final String postImage;
+  final String profileImage;
+
+  PostCard({required this.postImage, required this.profileImage});
+
+  @override
+  _PostCardState createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard>
+    with SingleTickerProviderStateMixin {
+  bool _liked = false;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _onDoubleTap() {
+    setState(() {
+      _liked = !_liked;
+    });
+    if (_liked) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: Colors.black, // Dark background color for Card
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ListTile(
+            leading: CircleAvatar(
+              backgroundColor:
+                  Colors.grey[700], // Darker background for CircleAvatar
+              backgroundImage: AssetImage(widget.profileImage),
+            ),
+            title: Text('User', style: TextStyle(color: Colors.white)),
+            trailing: IconButton(
+              icon: Icon(Icons.more_vert,
+                  color: Colors.white), // White icon color
+              onPressed: () {
+                // Action for more options
+              },
+            ),
+          ),
+          GestureDetector(
+            onDoubleTap: _onDoubleTap,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.asset(
+                  widget.postImage,
+                  width: double.infinity,
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+                _liked
+                    ? FadeTransition(
+                        opacity: _animation,
+                        child: Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                          size: 100,
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ],
+            ),
+          ),
+          ButtonBar(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.favorite_border, color: Colors.white),
+                onPressed: () {
+                  // Action for liking the post
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.comment_outlined, color: Colors.white),
+                onPressed: () {
+                  // Action for commenting on the post
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.send_outlined, color: Colors.white),
+                onPressed: () {
+                  // Action for sharing the post
+                },
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'User: This is a sample caption for the post.',
+              style: TextStyle(color: Colors.white),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

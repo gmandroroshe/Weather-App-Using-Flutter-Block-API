@@ -1,19 +1,25 @@
-// lib/widgets/sign_in_button.dart
 import 'package:flutter/material.dart';
 
 class SignInButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final Color buttonColor;
+  final Color textColor;
 
-  SignInButton({required this.onPressed});
+  SignInButton({
+    required this.onPressed,
+    this.buttonColor = Colors.blue,
+    this.textColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text('Sign In'),
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, 50),
+        backgroundColor: buttonColor, // Background color of the button
+        foregroundColor: textColor, // Text color of the button
       ),
+      child: Text('Sign In'),
     );
   }
 }

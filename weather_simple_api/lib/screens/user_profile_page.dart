@@ -25,6 +25,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: Colors.transparent, // Transparent background
           child: Container(
             width: 400, // Set width of the popup window
             height: 400, // Set height of the popup window
@@ -60,16 +61,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
     'assets/4.png',
     'assets/5.png',
     'assets/6.png',
+    'assets/1.png',
+    'assets/2.png',
+    'assets/3.png',
+    'assets/4.png',
+    'assets/5.png',
+    'assets/6.png',
+    'assets/1.png',
+    'assets/2.png',
+    'assets/3.png',
+    'assets/4.png',
+    'assets/5.png',
+    'assets/6.png',
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // Set background color to black
       appBar: AppBar(
-        title: Text(widget.username),
+        title: Text(widget.username, style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
         actions: [
           IconButton(
-            icon: Icon(Icons.more_vert),
+            icon: Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {
               // Action for more options
             },
@@ -78,14 +93,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
       body: Column(
         children: <Widget>[
+          SizedBox(
+            height: 0,
+          ),
           // Profile header
           Container(
             padding: EdgeInsets.all(16.0),
+            color: Colors.black, // Black background for header
             child: Row(
               children: <Widget>[
                 CircleAvatar(
                   radius: 50,
-                  backgroundColor: Colors.grey[300],
+                  backgroundColor: Colors.grey[700],
                   backgroundImage:
                       AssetImage('assets/2.png'), // Placeholder image
                 ),
@@ -97,12 +116,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       Text(
                         widget.username,
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                       SizedBox(height: 8),
                       Text(
                         'This is the user bio. It can be a short description about the user.',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: Colors.grey[500]),
                       ),
                       SizedBox(height: 8),
                       Row(
@@ -111,25 +132,31 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           Column(
                             children: <Widget>[
                               Text('120',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text('Posts'),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              Text('Posts',
+                                  style: TextStyle(color: Colors.grey[500])),
                             ],
                           ),
                           Column(
                             children: <Widget>[
                               Text('200k',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text('Followers'),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              Text('Followers',
+                                  style: TextStyle(color: Colors.grey[500])),
                             ],
                           ),
                           Column(
                             children: <Widget>[
                               Text('180',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text('Following'),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              Text('Following',
+                                  style: TextStyle(color: Colors.grey[500])),
                             ],
                           ),
                         ],
@@ -139,6 +166,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         onPressed: _toggleFollow,
                         child: Text(isFollowing ? 'Following' : 'Follow'),
                         style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Colors.blue, // Background color of the button
+                          foregroundColor:
+                              Colors.white, // Text color of the button
                           minimumSize: Size(double.infinity, 40),
                         ),
                       ),

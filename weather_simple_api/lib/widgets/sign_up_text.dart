@@ -1,20 +1,20 @@
-// lib/widgets/sign_up_text.dart
 import 'package:flutter/material.dart';
 
 class SignUpText extends StatelessWidget {
+  final Color textColor;
+
+  SignUpText({this.textColor = Colors.grey});
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text('Don’t have an account?'),
-        TextButton(
-          onPressed: () {
-            // Navigate to Sign Up page
-          },
-          child: Text('Sign Up'),
-        ),
-      ],
+    return GestureDetector(
+      onTap: () {
+        // Navigate to sign up page
+      },
+      child: Text(
+        'Don\'t have an account? Sign Up',
+        style: TextStyle(color: textColor),
+      ),
     );
   }
 }
